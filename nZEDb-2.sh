@@ -40,7 +40,8 @@ echo
 
 echo -e $YELLOW
 echo -e "---> [Installing PHP & Extensions...]"$BLACK
-sudo apt-get install -y php5 php5-dev php-pear php5-gd php5-mysqlnd php5-curl > /dev/null
+sudo apt-get install -y php-pear php7.0 php7.0-cli php7.0-dev php7.0-common > /dev/null
+sudo apt-get install -y php7.0-curl php7.0-json php7.0-gd php7.0-mysql php7.0-mbstring php7.0-mcrypt php7.0-xml > /dev/null
 echo -e $GREEN
 echo -e "DONE!"
 
@@ -48,8 +49,7 @@ echo -e $YELLOW
 echo -e "---> [Installing MySQL...]"$BLACK
 sudo mkdir /var/www
 sudo chmod -R 777 /var/www
-sudo apt-get install mysql-server-5.6 mysql-client-5.6 -y
-echo -e $GREEN
+sudo apt-get install -y mariadb-server mariadb-client libmysqlclient-dev > /dev/null
 echo -e "DONE!"
 
 echo -e $YELLOW
@@ -72,9 +72,9 @@ echo -e $GREEN
 echo -e "DONE!"
 
 echo -e $YELLOW
-echo -e "---> [Installing Nginx, PHP5 & PHP-FPM...]"$BLACK
+echo -e "---> [Installing Nginx, PHP7 & PHP-FPM...]"$BLACK
 sudo apt-get install nginx -y > /dev/null
-sudo apt-get install php5 php5-fpm -y > /dev/null
+sudo apt-get install php7.0-fpm -y > /dev/null
 echo -e $GREEN
 echo -e "DONE!"
 
@@ -83,7 +83,7 @@ echo -e "---> [Setting up Nginx...]"$BLACK
 sudo echo 'server {
     # Change these settings to match your machine.
     listen 80 default_server;
-    server_name 10.0.0.35 nzb.hostyea.com
+    server_name localhost; 
 
     # These are the log locations, you should not have to change these.
     access_log /var/log/nginx/access.log;
@@ -126,7 +126,7 @@ sudo echo 'server {
 
         # Uncomment the following line and comment the .sock line if you want to use TCP.
         #fastcgi_pass 127.0.0.1:9000;
-        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_pass unix:/var/run/php7.0-fpm.sock;
 
         # The next two lines should go in your fastcgi_params
         fastcgi_index index.php;
@@ -138,7 +138,7 @@ sudo echo 'server {
         location ~ ^/phpmyadmin/(.+\.php)$ {
             try_files $uri =404;
             root /usr/share/;
-            fastcgi_pass unix:/var/run/php5-fpm.sock;
+            fastcgi_pass unix:/var/run/php7.0-fpm.sock;
             fastcgi_index index.php;
             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
             include /etc/nginx/fastcgi_params;
@@ -156,10 +156,9 @@ sudo mkdir -p /var/log/nginx
 sudo chmod 755 /var/log/nginx
 sudo unlink /etc/nginx/sites-enabled/default
 sudo ln -s /etc/nginx/sites-available/nZEDb /etc/nginx/sites-enabled/nZEDb
-sudo service php5-fpm restart
-sudo service php5 restart
+sudo service php7.0-fpm restart
 sudo service nginx restart
-sudo usermod -aG www-data YOUR_USERNAME
+sudo usermod -aG www-data josh 
 echo -e $GREEN
 echo -e "DONE!"
 
@@ -2104,7 +2103,7 @@ ldap.max_links = -1
 ; Local Variables:
 ; tab-width: 4
 ; End:' > php.ini
-sudo mv php.ini /etc/php5/cli/
+sudo mv php.ini /etc/php/7.0/cli/
 
 sudo echo '[PHP]
 
@@ -4037,7 +4036,7 @@ ldap.max_links = -1
 ; Local Variables:
 ; tab-width: 4
 ; End:' > php.ini
-sudo mv php.ini /etc/php5/fpm/
+sudo mv php.ini /etc/php/7.0/fpm/
 echo -e $GREEN
 echo -e "DONE!"
 
@@ -4046,17 +4045,19 @@ echo -e "---> [Installing Media Processors...]"$BLACK
 sudo apt-get install software-properties-common -y > /dev/null
 sudo apt-get install unrar python-software-properties lame -y > /dev/null
 sudo apt-get install mediainfo -y > /dev/null
+sudo apt-get install php-imagick -y > /dev/null
 echo -e $GREEN
 echo -e "DONE!"
 
 echo -e $YELLOW
-echo -e "---> [Installing Git & Composer...]"$BLACK
+echo -e "---> [Installing Git & Zip/Unzip & Composer...]"$BLACK
 cd /var/www
 sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 sudo php composer-setup.php
 sudo php -r "unlink('composer-setup.php');"
 sudo mv composer.phar /usr/local/bin/composer
 sudo apt-get install git -y > /dev/null
+sudo apt-get install zip unzip php7.0-zip -y > /dev/null
 sudo composer create-project --no-dev --keep-vcs nzedb/nzedb
 echo -e $GREEN
 echo -e "DONE!"
@@ -4066,8 +4067,8 @@ echo -e "---> [Fixing permissions...]"$BLACK
 sudo chgrp www-data nzedb
 sudo chmod -R 777 /var/www/nzedb
 cd nzedb
-sudo mkdir /var/lib/php5/sessions
-sudo chmod 777 /var/lib/php5/sessions
+sudo mkdir /var/lib/php/sessions
+sudo chmod 777 /var/lib/php/sessions
 sudo chgrp www-data /var/www/nzedb/resources/smarty/templates_c
 sudo chgrp -R www-data /var/www/nzedb/resources/covers
 sudo chgrp www-data /var/www/nzedb/www
@@ -4078,12 +4079,12 @@ echo -e "DONE!"
 
 echo -e $YELLOW
 echo -e "---> [Installing MemCache & APC...]"$BLACK
-sudo apt-get install memcached php5-memcached -y > /dev/null
+sudo apt-get install memcached php-memcached -y > /dev/null
 sudo apt-get install php-apc -y > /dev/null
 sudo service apache2 restart
 sudo cp /usr/share/doc/php5-apcu/apc.php /var/www/nzedb/www/admin
 sudo service nginx restart
-sudo chmod o+r /var/lib/php5
+sudo chmod o+r /var/lib/php
 echo -e $GREEN
 echo -e "DONE!"
 

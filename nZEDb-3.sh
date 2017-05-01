@@ -54,7 +54,7 @@ echo -e "DONE!"
 echo -e $YELLOW
 echo -e "---> [Importing Daily Dumps...]"$BLACK
 sudo chmod 777 /var/www/nzedb/resources
-sudo chown -R YOUR_USERNAME:www-data /var/www/nzedb/cli
+sudo chown -R josh:www-data /var/www/nzedb/cli
 echo
 echo -e $RED"PLEASE BE PATIENT!  THIS   + M A Y +   TAKE A LONG TIME!"$BLACK
 echo
