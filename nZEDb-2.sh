@@ -82,7 +82,7 @@ echo -e $YELLOW
 echo -e "---> [Setting up Nginx...]"$BLACK
 sudo echo 'server {
     # Change these settings to match your machine.
-    listen 80 default_server;
+    listen 80 ;
     server_name localhost; 
 
     # These are the log locations, you should not have to change these.
@@ -126,7 +126,7 @@ sudo echo 'server {
 
         # Uncomment the following line and comment the .sock line if you want to use TCP.
         #fastcgi_pass 127.0.0.1:9000;
-        fastcgi_pass unix:/var/run/php7.0-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
 
         # The next two lines should go in your fastcgi_params
         fastcgi_index index.php;
