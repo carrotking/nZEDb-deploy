@@ -4050,7 +4050,8 @@ echo -e $GREEN
 echo -e "DONE!"
 
 echo -e $YELLOW
-echo -e "---> [Installing Git & Zip/Unzip & Composer...]"$BLACK
+echo -e "---> [Installing Git & Zip/Unzip & APCu & Composer...]"$BLACK
+sudo apt-get install php-apcu > /dev/null
 cd /var/www
 sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 sudo php composer-setup.php
@@ -4082,7 +4083,7 @@ echo -e "---> [Installing MemCache & APC...]"$BLACK
 sudo apt-get install memcached php-memcached -y > /dev/null
 sudo apt-get install php-apc -y > /dev/null
 sudo service apache2 restart
-sudo cp /usr/share/doc/php5-apcu/apc.php /var/www/nzedb/www/admin
+sudo cp /usr/share/doc/php-apcu/apc.php /var/www/nzedb/www/admin
 sudo service nginx restart
 sudo chmod o+r /var/lib/php
 echo -e $GREEN
